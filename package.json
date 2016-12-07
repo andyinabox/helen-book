@@ -1,0 +1,13 @@
+{
+  "name": "helen-book",
+  "version": "0.0.1",
+  "description": "A portrait",
+  "main": "index.js",
+  "scripts": {
+  },
+  "author": "Andy Dayton <amdayton@gmail.com> (http://andydayton.com/)",
+  "license": "ISC",
+  "dependencies": {
+    "basiljs": "basiljs/basil.js"
+  }
+}
