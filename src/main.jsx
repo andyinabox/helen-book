@@ -1,10 +1,11 @@
 #includepath "../node_modules/";
-#include "basiljs/basil.js";
-#include "./Face.js";
+#include "polyfills.jsx";
+#include "HelenFace.jsx";
 
 // http://www.indesignjs.de/extendscriptAPI/indesign12/#about.html
 
 var data;
+var faces;
 var doc;
 var MARGIN = 36;
 var GUTTER = 20;
@@ -19,6 +20,7 @@ function parseData(path) {
 	return b.JSON.decode(b.loadString("data.json")).rows.map(function(d) {
 		var data = d.value;
 		data.flickr_description = cleanText(data.flickr_description);
+		data.face = new HelenFace(data.annotations);
 		return data;
 	});
 }
