@@ -43,6 +43,23 @@ HelenFace.prototype.draw = function(x, y, width) {
 	return b.endShape();
 }
 
+HelenFace.prototype.drawCentered = function(x, y, width) {
+	var centroid = this.centroids.face;
+
+	b.beginShape();
+
+		b.forEach(this.normalized, function(v, i) {
+			b.println(v.x + ' ' + centroid.x);
+
+			var xx = width * (v.x - centroid.x) + x;
+			var yy = width * (v.y - centroid.y) + y;
+
+			b.vertex(xx, yy);
+		});
+
+	return b.endShape();
+}
+
 HelenFace.prototype.getPoints = function(x, y, scale) {
 	return this.normalized;
 }

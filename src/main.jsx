@@ -54,7 +54,7 @@ function draw() {
 
 			b.stroke(0, 0, 0);
 			b.noFill();
-			var poly = d.face.draw(MARGIN, b.height / 5, mWidth);
+			var poly = d.face.drawCentered(b.width/2, b.height/3, 2 * b.width/3	);
 			poly.textWrapPreferences.textWrapMode = TextWrapModes.CONTOUR;
 
 
