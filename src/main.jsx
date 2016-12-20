@@ -5,7 +5,6 @@
 // http://www.indesignjs.de/extendscriptAPI/indesign12/#about.html
 
 var data;
-var faces;
 var doc;
 var MARGIN = 36;
 var GUTTER = 20;
