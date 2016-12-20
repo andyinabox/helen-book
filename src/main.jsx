@@ -32,8 +32,13 @@ function setup() {
 
 function draw() {
 	b.println(data.length);
-	// b.forEach(data, function(d, i) {
-	var d = data[0]; var i = 0;
+
+	var mWidth = b.width - MARGIN*2;
+	var mHeight = b.height - MARGIN*2;
+	var tbWidth = (mWidth - GUTTER*2) / 3;
+
+	b.forEach(data, function(d, i) {
+	// var d = data[0]; var i = 0;
 		var annotations = d.annotations;
 		var imageSize = d.helen_img_size;
 		// var imgHeight = b.height;
@@ -42,23 +47,16 @@ function draw() {
 		var imgHeight = imageSize[1] * (imgWidth / imageSize[0]);
 		var annotationScale = imgWidth / imageSize[1];
 
-		b.pushMatrix();
+		// b.pushMatrix();
 
 			// b.translate((b.width-imageSize[0] * annotationScale) / 2, 0);
 			// b.scale(annotationScale);
 
-			b.beginShape();
+			b.stroke(0, 0, 0);
+			b.noFill();
+			var poly = d.face.draw(MARGIN, b.height / 5, mWidth);
+			poly.textWrapPreferences.textWrapMode = TextWrapModes.CONTOUR;
 
-				b.forEach(annotations, function(a, j) {
-					b.println(i+'.'+j);
-					
-					b.noFill();
-					b.stroke(200, 200, 200);
-					b.vertex(a[0]*annotationScale, a[1]*annotationScale);
-
-				});
-
-			b.endShape().textWrapPreferences.textWrapMode = TextWrapModes.CONTOUR;
 
 			// b.forEach(annotations, function(a, i) {
 			// 	b.println(i);
@@ -72,15 +70,12 @@ function draw() {
 
 			// });
 
-		b.popMatrix();
+		// b.popMatrix();
 
 		b.fill(0, 0, 0);
 		b.textFont('Georgia');
 		b.textSize(10);
 
-		var mWidth = b.width - MARGIN*2;
-		var mHeight = b.height - MARGIN*2;
-		var tbWidth = (mWidth - GUTTER*2) / 3;
 
 		var text1 = b.text(d.flickr_description, MARGIN, MARGIN, tbWidth, mHeight);
 		var text2 = b.text('', tbWidth+MARGIN+GUTTER, MARGIN, tbWidth, mHeight);
@@ -92,7 +87,7 @@ function draw() {
 		if(i<data.length-1) {
 			b.addPage(b.AFTER);
 		}
-	// });
+	});
 }
 
 

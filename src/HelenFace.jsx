@@ -28,8 +28,36 @@ var HelenFace = function(annotations, opts) {
 //
 // PUBLIC METHODS
 // 
+// 
 
+HelenFace.prototype.draw = function(x, y, width) {
+	b.beginShape();
 
+		b.forEach(this.normalized, function(v, i) {
+			var xx = width * v.x + x;
+			var yy = width * v.y + y;
+
+			b.vertex(xx, yy);
+		});
+
+	return b.endShape();
+}
+
+HelenFace.prototype.getPoints = function(x, y, scale) {
+	return this.normalized;
+}
+
+HelenFace.prototype.getLeftEyePoints = function(x, y, scale) {
+	return this.normalized.slice(LEFT_EYE_RANGE[0], LEFT_EYE_RANGE[1]);
+}
+
+HelenFace.prototype.getRightEyePoints = function(x, y, scale) {
+	return this.normalized.slice(RIGHT_EYE_RANGE[0], RIGHT_EYE_RANGE[1]);
+}
+
+HelenFace.prototype.getMouthPoints = function(x, y, scale) {
+	return this.normalized.slice(MOUTH_OUTLINE_RANGE[0], MOUTH_OUTLINE_RANGE[1]);
+}
 
 //
 // PRIVATE METHODS
@@ -43,18 +71,25 @@ HelenFace.prototype._getAnnotationExtents = function (annotations) {
 	var xs = annotations.map(function(d) { return d[0]; });
 	var ys = annotations.map(function(d) { return d[1]; });
 
-	xExtents = [b.min(xs), b.max(xs)];
-	yExtents = [b.min(ys), b.max(ys)];
+	var xMin = b.min(xs);
+	var xMax = b.max(xs);
+	var yMin = b.min(ys);
+	var yMax = b.max(ys);
 
-	return [xExtents, yExtents];
+	var aspect = Math.abs(xMax - xMin) / Math.abs(yMax - yMin);
+
+	xExtents = [xMin, xMax];
+	yExtents = [yMin, yMax];
+
+	return { x: xExtents, y: yExtents, aspect: aspect };
 }
 
 
 HelenFace.prototype._normalizeAnnotations = function (annotations, extents) {
 
 	return normalized = annotations.map(function(d, i) {
-		var x = b.norm(d[0], extents[0][0], extents[0][1]);
-		var y = b.norm(d[1], extents[1][0], extents[1][1]);
+		var x = b.norm(d[0], extents.x[0], extents.x[1]);
+		var y = b.norm(d[1], extents.y[0], extents.y[1]) * extents.aspect;
 
 		return new b.Vector(x, y);
 	});
