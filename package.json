@@ -2,8 +2,9 @@
   "name": "helen-book",
   "version": "0.0.1",
   "description": "A portrait",
-  "main": "index.js",
+  "main": "index.jsx",
   "scripts": {
+    "build": "extendscriptr --script src/main.jsx --output index.jsx"
   },
   "author": "Andy Dayton <amdayton@gmail.com> (http://andydayton.com/)",
   "license": "ISC",
@@ -13,5 +14,6 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/andyinabox/helen-book.git"
-  }
+  },
+  "devDependencies": {}
 }
