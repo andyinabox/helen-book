@@ -5,7 +5,9 @@
   "main": "index.jsx",
   "scripts": {
     "open": "open helen-book.indd",
-    "start": "osascript scripts/run.scpt $PWD/index.jsx"
+    "start": "osascript scripts/run.scpt $PWD/index.jsx",
+    "setup": "npm run descriptions",
+    "descriptions": "mkdir -p data/txt/ && node scripts/parse-descriptions.js"
   },
   "author": "Andy Dayton <amdayton@gmail.com> (http://andydayton.com/)",
   "license": "ISC",
@@ -17,5 +19,8 @@
     "type": "git",
     "url": "git+https://github.com/andyinabox/helen-book.git"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "parse-entities": "^1.1.0",
+    "strip": "^3.0.0"
+  }
 }

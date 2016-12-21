@@ -2,8 +2,12 @@
 
 var data;
 var doc;
+var description;
 var MARGIN = 36;
 var GUTTER = 20;
+
+app.textImportPreferences.characterSet = TextImportCharacterSet.MACINTOSH_ROMAN;
+app.textImportPreferences.useTypographersQuotes = true;
 
 function cleanText(str) {
 	var re = /<[^>]*>/g
@@ -18,6 +22,10 @@ function parseData(path) {
 		data.face = new HelenFace(data.annotations);
 		return data;
 	});
+}
+
+function loadDescription(id) {
+	return b.loadString('txt/' + id + '.txt');
 }
 
 
@@ -78,7 +86,8 @@ function draw() {
 		b.textSize(10);
 
 
-		var text1 = b.text(d.flickr_description, MARGIN, MARGIN, tbWidth, mHeight);
+		// var text1 = b.text(d.flickr_description, MARGIN, MARGIN, tbWidth, mHeight);
+		var text1 = b.text(loadDescription(d._id), MARGIN, MARGIN, tbWidth, mHeight);
 		var text2 = b.text('', tbWidth+MARGIN+GUTTER, MARGIN, tbWidth, mHeight);
 		var text3 = b.text('', tbWidth*2+MARGIN+GUTTER*2, MARGIN, tbWidth, mHeight);
 
