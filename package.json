@@ -5,8 +5,7 @@
   "main": "index.jsx",
   "scripts": {
     "open": "open helen-book.indd",
-    "start": "osascript scripts/run.scpt $PWD/index.jsx",
-    "constants" : "curl https://amdayton:falilv33@amdayton.cloudant.com/ -o data/constants.json"
+    "start": "osascript scripts/run.scpt $PWD/index.jsx"
   },
   "author": "Andy Dayton <amdayton@gmail.com> (http://andydayton.com/)",
   "license": "ISC",
