@@ -1,7 +1,3 @@
-#includepath "../node_modules/";
-#include "basiljs/basil.js";
-
-
 // ranges are inclusive of first,
 // exclusive of second
 var RIGHT_EYE_RANGE = [114, 134];

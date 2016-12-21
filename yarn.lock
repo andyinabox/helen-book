@@ -5,3 +5,11 @@
 basiljs@basiljs/basil.js:
   version "1.1.0"
   resolved "https://codeload.github.com/basiljs/basil.js/tar.gz/f34b8a3722dd635dc0dd7cc45edfc595865e1f58"
+
+extendscript-es5-shim@ExtendScript/extendscript-es5-shim:
+  version "0.0.1"
+  resolved "https://codeload.github.com/ExtendScript/extendscript-es5-shim/tar.gz/5eb186de69740356401095aafc19aff0360272ae"
+
+lodash@^4.17.2:
+  version "4.17.2"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.2.tgz#34a3055babe04ce42467b607d700072c7ff6bf42"

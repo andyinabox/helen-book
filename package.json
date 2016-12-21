@@ -4,12 +4,14 @@
   "description": "A portrait",
   "main": "index.jsx",
   "scripts": {
-    "build": "extendscriptr --script src/main.jsx --output index.jsx"
+    "open": "open helen-book.indd",
+    "start": "osascript scripts/run.scpt $PWD/index.jsx"
   },
   "author": "Andy Dayton <amdayton@gmail.com> (http://andydayton.com/)",
   "license": "ISC",
   "dependencies": {
-    "basiljs": "basiljs/basil.js"
+    "basiljs": "basiljs/basil.js",
+    "extendscript-es5-shim": "ExtendScript/extendscript-es5-shim"
   },
   "repository": {
     "type": "git",

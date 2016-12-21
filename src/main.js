@@ -1,7 +1,3 @@
-#includepath "../node_modules/";
-#include "polyfills.jsx";
-#include "HelenFace.jsx";
-
 // http://www.indesignjs.de/extendscriptAPI/indesign12/#about.html
 
 var data;
@@ -37,8 +33,8 @@ function draw() {
 	var mHeight = b.height - MARGIN*2;
 	var tbWidth = (mWidth - GUTTER*2) / 3;
 
-	b.forEach(data, function(d, i) {
-	// var d = data[0]; var i = 0;
+	// b.forEach(data, function(d, i) {
+	var d = data[0]; var i = 0;
 		var annotations = d.annotations;
 		var imageSize = d.helen_img_size;
 		// var imgHeight = b.height;
@@ -87,7 +83,7 @@ function draw() {
 		if(i<data.length-1) {
 			b.addPage(b.AFTER);
 		}
-	});
+	// });
 }
 
 

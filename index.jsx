@@ -1,1 +1,1 @@
-﻿#include "src/main.jsx";
+﻿#includepath "./node_modules/";#includepath "./src/";#include "basiljs/basil.js"#include "extendscript-es5-shim/index.js";#include "polyfills.js"#include "HelenFace.js";#include "main.js";
