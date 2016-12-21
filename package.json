@@ -6,13 +6,15 @@
   "scripts": {
     "open": "open helen-book.indd",
     "start": "osascript scripts/run.scpt $PWD/index.jsx",
-    "setup": "npm run descriptions",
+    "setup": "npm run data && npm run descriptions",
+    "data": "node scripts/get-data.js --limit=10",
     "descriptions": "mkdir -p data/txt/ && node scripts/parse-descriptions.js"
   },
   "author": "Andy Dayton <amdayton@gmail.com> (http://andydayton.com/)",
   "license": "ISC",
   "dependencies": {
     "basiljs": "basiljs/basil.js",
+    "es6-promise": "^4.0.5",
     "extendscript-es5-shim": "ExtendScript/extendscript-es5-shim"
   },
   "repository": {
@@ -20,6 +22,9 @@
     "url": "git+https://github.com/andyinabox/helen-book.git"
   },
   "devDependencies": {
+    "dotenv": "^2.0.0",
+    "download": "^5.0.2",
+    "minimist": "^1.2.0",
     "parse-entities": "^1.1.0",
     "strip": "^3.0.0"
   }
