@@ -11,7 +11,7 @@ const Promise = require('es6-promise').Promise;
 var db = process.env.COUCHDB_SERVER;
 
 var constantsUrl = db + 'helendb/_design/main/_view/constants';
-var dataUrl = db + 'helendb/_design/main/_view/entries?' + querystring.stringify(argv);
+var dataUrl = db + 'helendb/_design/main/_view/has_description?' + querystring.stringify(argv);
 
 console.log('grabbing: '+constantsUrl)
 var constants = download(constantsUrl).pipe(fs.createWriteStream('data/constants.json'));
