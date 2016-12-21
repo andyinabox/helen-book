@@ -33,8 +33,8 @@ function draw() {
 	var mHeight = b.height - MARGIN*2;
 	var tbWidth = (mWidth - GUTTER*2) / 3;
 
-	// b.forEach(data, function(d, i) {
-	var d = data[0]; var i = 0;
+	b.forEach(data, function(d, i) {
+	// var d = data[0]; var i = 0;
 		var annotations = d.annotations;
 		var imageSize = d.helen_img_size;
 		// var imgHeight = b.height;
@@ -50,9 +50,15 @@ function draw() {
 
 			b.stroke(0, 0, 0);
 			b.noFill();
-			var poly = d.face.drawCentered(b.width/2, b.height/3, 2 * b.width/3	);
-			poly.textWrapPreferences.textWrapMode = TextWrapModes.CONTOUR;
+			var features = d.face.drawCentered(b.width/2, b.height/3, 2 * b.width/3	);
 
+			// b.println(Object.keys(features).length);
+
+			// set text wrap
+			Object.keys(features).forEach(function(key) {
+				b.println(key);
+				features[key].textWrapPreferences.textWrapMode = TextWrapModes.CONTOUR;
+			});
 
 			// b.forEach(annotations, function(a, i) {
 			// 	b.println(i);
@@ -83,7 +89,7 @@ function draw() {
 		if(i<data.length-1) {
 			b.addPage(b.AFTER);
 		}
-	// });
+	});
 }
 
 

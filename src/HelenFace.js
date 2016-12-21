@@ -1,8 +1,14 @@
 // ranges are inclusive of first,
 // exclusive of second
+
+var LEFT_EYEBROW_RANGE = [174, 194];
+var RIGHT_EYEBROW_RANGE = [154, 174];
+var NOSE_RANGE = [41, 58];
+var CHIN_RANGE = [0, 41];
 var RIGHT_EYE_RANGE = [114, 134];
 var LEFT_EYE_RANGE = [134, 154];
 var MOUTH_OUTLINE_RANGE = [58, 86];
+var MOUTH_LIPLINE_RANGE = [86, 114];
 
 var _defaults = {
 }
@@ -19,6 +25,16 @@ var HelenFace = function(annotations, opts) {
 	this.extents = this._getAnnotationExtents(annotations);
 	this.normalized = this._normalizeAnnotations(annotations, this.extents);
 	this.centroids = this._calcCentroids(this.normalized);
+	this.features = {
+		'left_eyebrow' : LEFT_EYEBROW_RANGE,
+		'right_eyebrow' : RIGHT_EYEBROW_RANGE,
+		'left_eye' : LEFT_EYE_RANGE,
+		'right_eye' : RIGHT_EYE_RANGE,
+		'nose' : NOSE_RANGE,
+		'mouth_outline' : MOUTH_OUTLINE_RANGE,
+		'mouth_lipline' : MOUTH_LIPLINE_RANGE,
+		'chin' : CHIN_RANGE
+	}
 }
 
 //
@@ -40,20 +56,32 @@ HelenFace.prototype.draw = function(x, y, width) {
 }
 
 HelenFace.prototype.drawCentered = function(x, y, width) {
+	var normalized = this.normalized;
 	var centroid = this.centroids.face;
+	var features = this.features;
+	var polygons = {};
 
-	b.beginShape();
+	var iterator = function(v, i) {
 
-		b.forEach(this.normalized, function(v, i) {
-			b.println(v.x + ' ' + centroid.x);
+		var xx = width * (v.x - centroid.x) + x;
+		var yy = width * (v.y - centroid.y) + y;
 
-			var xx = width * (v.x - centroid.x) + x;
-			var yy = width * (v.y - centroid.y) + y;
+		b.vertex(xx, yy);		
+	}
 
-			b.vertex(xx, yy);
-		});
+	var drawPart = function(points, range, cb) {
+		var points = points.slice(range[0], range[1]);
 
-	return b.endShape();
+		b.beginShape();
+		points.forEach(cb);
+		return b.endShape();
+	};
+
+	Object.keys(features).forEach(function(key, i) {
+		polygons[key] = drawPart(normalized, features[key], iterator);
+	});
+
+	return polygons;
 }
 
 HelenFace.prototype.getPoints = function(x, y, scale) {
