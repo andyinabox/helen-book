@@ -43,43 +43,63 @@ var HelenFace = function(annotations, opts) {
 // 
 
 HelenFace.prototype.draw = function(x, y, width) {
-	b.beginShape();
 
-		b.forEach(this.normalized, function(v, i) {
-			var xx = width * v.x + x;
-			var yy = width * v.y + y;
+	var iterator = function(v, i) {
+		var xx = width * v.x + x;
+		var yy = width * v.y + y;
 
-			b.vertex(xx, yy);
-		});
+		b.vertex(xx, yy);
+	}
 
-	return b.endShape();
+	return this._drawPoints(this.normalized, iterator);
 }
 
-HelenFace.prototype.drawCentered = function(x, y, width) {
-	var normalized = this.normalized;
+HelenFace.prototype.drawFeatures = function(x, y, width) {
 	var centroid = this.centroids.face;
-	var features = this.features;
 	var polygons = {};
 
 	var iterator = function(v, i) {
+		var xx = width * v.x + x;
+		var yy = width * v.y + y;
 
+		b.vertex(xx, yy);
+	}
+
+	Object.keys(this.features).forEach(function(key, i) {
+		polygons[key] = this._drawPoints(this.normalized, iterator, this.features[key]);
+	}, this);
+
+	return polygons;
+}
+
+HelenFace.prototype.drawCentered = function(x, y, width) {
+	var centroid = this.centroids.face;
+
+	// draw centered
+	var iterator = function(v, i) {
 		var xx = width * (v.x - centroid.x) + x;
 		var yy = width * (v.y - centroid.y) + y;
-
 		b.vertex(xx, yy);		
 	}
 
-	var drawPart = function(points, range, cb) {
-		var points = points.slice(range[0], range[1]);
+	return this._drawPoints(this.normalized, iterator);
 
-		b.beginShape();
-		points.forEach(cb);
-		return b.endShape();
-	};
+}
 
-	Object.keys(features).forEach(function(key, i) {
-		polygons[key] = drawPart(normalized, features[key], iterator);
-	});
+HelenFace.prototype.drawFeaturesCentered = function(x, y, width) {
+	var centroid = this.centroids.face;
+	var polygons = {};
+
+	// draw centered
+	var iterator = function(v, i) {
+		var xx = width * (v.x - centroid.x) + x;
+		var yy = width * (v.y - centroid.y) + y;
+		b.vertex(xx, yy);		
+	}
+
+	Object.keys(this.features).forEach(function(key, i) {
+		polygons[key] = this._drawPoints(this.normalized, iterator, this.features[key]);
+	}, this);
 
 	return polygons;
 }
@@ -103,6 +123,18 @@ HelenFace.prototype.getMouthPoints = function(x, y, scale) {
 //
 // PRIVATE METHODS
 // 
+
+HelenFace.prototype._drawPoints = function(points, iterator, range) {
+
+	// slice points
+	if(typeof range !== 'undefined') {
+		points = points.slice(range[0], range[1]);
+	}
+
+	b.beginShape();
+	points.forEach(iterator);
+	return b.endShape();
+}
 
 HelenFace.prototype._getAnnotationExtents = function (annotations) {
 

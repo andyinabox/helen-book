@@ -50,13 +50,12 @@ function draw() {
 
 			b.stroke(0, 0, 0);
 			b.noFill();
-			var features = d.face.drawCentered(b.width/2, b.height/3, 2 * b.width/3	);
+			var features = d.face.drawFeaturesCentered(b.width/2, b.height/3, 2 * b.width/3	);
 
 			// b.println(Object.keys(features).length);
 
 			// set text wrap
 			Object.keys(features).forEach(function(key) {
-				b.println(key);
 				features[key].textWrapPreferences.textWrapMode = TextWrapModes.CONTOUR;
 			});
 
