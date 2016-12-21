@@ -1,8 +1,12 @@
+// usage:
+// node scripts/get-data.js data_doc_name [args]
+
 const fs = require('fs');
 const querystring = require('querystring');
 
 require('dotenv').config();
 var argv = require('minimist')(process.argv.slice(2));
+var doc = argv._.length ? argv._[0] : 'entries';
 delete argv._;
 
 const download = require('download');
@@ -11,7 +15,7 @@ const Promise = require('es6-promise').Promise;
 var db = process.env.COUCHDB_SERVER;
 
 var constantsUrl = db + 'helendb/_design/main/_view/constants';
-var dataUrl = db + 'helendb/_design/main/_view/has_description?' + querystring.stringify(argv);
+var dataUrl = db + 'helendb/_design/main/_view/' + doc + '?' + querystring.stringify(argv);
 
 console.log('grabbing: '+constantsUrl)
 var constants = download(constantsUrl).pipe(fs.createWriteStream('data/constants.json'));

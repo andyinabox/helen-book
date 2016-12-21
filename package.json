@@ -7,7 +7,7 @@
     "open": "open helen-book.indd",
     "start": "osascript scripts/run.scpt $PWD/index.jsx",
     "setup": "npm run data && npm run descriptions",
-    "data": "node scripts/get-data.js --limit=10",
+    "data": "node scripts/get-data.js has_description --limit=10",
     "descriptions": "mkdir -p data/txt/ && node scripts/parse-descriptions.js"
   },
   "author": "Andy Dayton <amdayton@gmail.com> (http://andydayton.com/)",
