@@ -13,9 +13,9 @@ or
 
 ## Todo
 
- - [ ] Draw face features
- - [ ] Adjust text font size to fill frame
- - [ ] Detect urls
+ - [x] Draw face features
+ - [x] Adjust text font size to fill frame
+ - [x] Detect urls
  - [ ] Adjust number of columns based on text length
  - [ ] Proper noun redaction
  - [ ] Improved handling of text encoding
