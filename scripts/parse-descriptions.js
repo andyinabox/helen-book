@@ -13,6 +13,7 @@ var cleanText = (str) => {
 }
 
 data.forEach((d, i) => {
-	fs.writeFileSync(__dirname + '/../data/txt/' + d._id + '.txt', cleanText(d.flickr_description), 'utf8');
+	description = d.flickr_description || d.flickr_title;
+	fs.writeFileSync(__dirname + '/../data/txt/' + d._id + '.txt', cleanText(description), 'utf8');
 });
 

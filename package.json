@@ -4,11 +4,12 @@
   "description": "A portrait",
   "main": "index.jsx",
   "scripts": {
-    "open": "open helen-book.indd",
+    "open": "open helen-book.indd && open index.jsx",
     "start": "osascript scripts/run.scpt $PWD/index.jsx",
-    "setup": "npm run data && npm run descriptions",
+    "setup": "npm run clobber; npm run data && npm run descriptions",
     "data": "node scripts/get-data.js has_description --limit=10",
-    "descriptions": "mkdir -p data/txt/ && node scripts/parse-descriptions.js"
+    "descriptions": "mkdir -p data/txt/ && node scripts/parse-descriptions.js",
+    "clobber": "rm data/*.json && rm -rf data/txt"
   },
   "author": "Andy Dayton <amdayton@gmail.com> (http://andydayton.com/)",
   "license": "ISC",
