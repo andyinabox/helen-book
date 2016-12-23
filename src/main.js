@@ -16,6 +16,7 @@ function parseData(path) {
 	return b.JSON.decode(b.loadString("data.json")).rows.map(function(d) {
 		var data = d.value;
 		data.face = new HelenFace(data.annotations);
+		data.flickr_response = b.JSON.decode(data.flickr_response);
 		return data;
 	});
 }
