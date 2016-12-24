@@ -44,26 +44,23 @@ var HelenFace = function(annotations, opts) {
 
 HelenFace.prototype.draw = function(x, y, width) {
 
-	var iterator = function(v, i) {
-		var xx = width * v.x + x;
-		var yy = width * v.y + y;
-
-		b.vertex(xx, yy);
-	}
+	var iterator = this._getIterator('basic', {
+		x: x,
+		y: y, 
+		width: width,
+	});
 
 	return this._drawPoints(this.normalized, iterator);
 }
 
 HelenFace.prototype.drawFeatures = function(x, y, width) {
-	var centroid = this.centroids.face;
 	var polygons = {};
 
-	var iterator = function(v, i) {
-		var xx = width * v.x + x;
-		var yy = width * v.y + y;
-
-		b.vertex(xx, yy);
-	}
+	var iterator = this._getIterator('basic', {
+		x: x,
+		y: y, 
+		width: width
+	});
 
 	Object.keys(this.features).forEach(function(key, i) {
 		polygons[key] = this._drawPoints(this.normalized, iterator, this.features[key]);
@@ -73,29 +70,41 @@ HelenFace.prototype.drawFeatures = function(x, y, width) {
 }
 
 HelenFace.prototype.drawCentered = function(x, y, width) {
-	var centroid = this.centroids.face;
 
 	// draw centered
-	var iterator = function(v, i) {
-		var xx = width * (v.x - centroid.x) + x;
-		var yy = width * (v.y - centroid.y) + y;
-		b.vertex(xx, yy);		
-	}
+	// var iterator = function(v, i) {
+	// 	var xx = width * (v.x - centroid.x) + x;
+	// 	var yy = width * (v.y - centroid.y) + y;
+	// 	b.vertex(xx, yy);		
+	// }
+
+	var iterator = this._getIterator('centered', {
+		x: x,
+		y: y, 
+		width: width,
+		centroid: his.centroids.face
+	});
 
 	return this._drawPoints(this.normalized, iterator);
 
 }
 
 HelenFace.prototype.drawFeaturesCentered = function(x, y, width) {
-	var centroid = this.centroids.face;
 	var polygons = {};
 
 	// draw centered
-	var iterator = function(v, i) {
-		var xx = width * (v.x - centroid.x) + x;
-		var yy = width * (v.y - centroid.y) + y;
-		b.vertex(xx, yy);		
-	}
+	// var iterator = function(v, i) {
+	// 	var xx = width * (v.x - centroid.x) + x;
+	// 	var yy = width * (v.y - centroid.y) + y;
+	// 	b.vertex(xx, yy);		
+	// }
+
+	var iterator = this._getIterator('centered', {
+		x: x,
+		y: y, 
+		width: width,
+		centroid: his.centroids.face
+	});
 
 	Object.keys(this.features).forEach(function(key, i) {
 		polygons[key] = this._drawPoints(this.normalized, iterator, this.features[key]);
@@ -103,6 +112,8 @@ HelenFace.prototype.drawFeaturesCentered = function(x, y, width) {
 
 	return polygons;
 }
+
+
 
 HelenFace.prototype.getPoints = function(x, y, scale) {
 	return this.normalized;
@@ -123,6 +134,26 @@ HelenFace.prototype.getMouthPoints = function(x, y, scale) {
 //
 // PRIVATE METHODS
 // 
+
+HelenFace.prototype._getIterator = function(type, vars) {
+
+	var iterators = {
+		'basic' : function(v, i) {
+			var xx = vars.width * v.x + vars.x;
+			var yy = vars.width * v.y + vars.y;
+
+			b.vertex(xx, yy);			
+		}
+		'centered' : function(v, i) {
+			var xx = vars.width * (v.x - vars.centroid.x) + vars.x;
+			var yy = vars.width * (v.y - vars.centroid.y) + vars.y;
+			b.vertex(xx, yy);				
+		}
+	}
+
+	return iterators[type];
+
+}
 
 HelenFace.prototype._drawPoints = function(points, iterator, range) {
 
