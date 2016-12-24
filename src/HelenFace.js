@@ -107,43 +107,43 @@ HelenFace.prototype.drawFeaturesCentered = function(x, y, width) {
 
 
 
-HelenFace.prototype.getPoints = function(iterator, x, y, width) {
+HelenFace.prototype.getPoints = function(transform, x, y, width) {
 	return this.normalized;
 }
 
-HelenFace.prototype.getLeftEyePoints = function(iterator, x, y, width) {
+HelenFace.prototype.getLeftEyePoints = function(transform, x, y, width) {
 	return this.normalized.slice(LEFT_EYE_RANGE[0], LEFT_EYE_RANGE[1]);
 }
 
-HelenFace.prototype.getRightEyePoints = function(iterator, x, y, width) {
+HelenFace.prototype.getRightEyePoints = function(transform, x, y, width) {
 	return this.normalized.slice(RIGHT_EYE_RANGE[0], RIGHT_EYE_RANGE[1]);
 }
 
-HelenFace.prototype.getMouthPoints = function(iterator, x, y, width) {
+HelenFace.prototype.getMouthPoints = function(transform, x, y, width) {
 	return this.normalized.slice(MOUTH_OUTLINE_RANGE[0], MOUTH_OUTLINE_RANGE[1]);
 }
 
-// HelenFace.prototype.getFirstPoint = function(iterator, x, y, width) {
-// 	var transform = this._getIterator(iterator, {
-// 		x: x,
-// 		y: y,
-// 		width: width,
-// 		centroid: this.centroid.face
-// 	});
+HelenFace.prototype.getFirstPoint = function(type, x, y, width) {
+	var transform = this._getTransform(type, {
+		x: x,
+		y: y,
+		width: width,
+		centroid: this.centroids.face
+	});
 
-// 	return transform(this.normalized[0]);
-// }
+	return transform(this.normalized[0]);
+}
 
-// HelenFace.prototype.getLastPoint = function(x, y, width) {
-// 	var transform = this._getIterator(iterator, {
-// 		x: x,
-// 		y: y,
-// 		width: width,
-// 		centroid: this.centroid.face
-// 	});
+HelenFace.prototype.getLastPoint = function(type, x, y, width) {
+	var transform = this._getTransform(type, {
+		x: x,
+		y: y,
+		width: width,
+		centroid: this.centroids.face
+	});
 
-// 	return this.normalized[this.normalized.length-1];
-// }
+	return transform(this.normalized[this.normalized.length-1]);
+}
 
 //
 // PRIVATE METHODS
@@ -180,7 +180,7 @@ HelenFace.prototype._drawPoints = function(points, range) {
 	b.beginShape();
 
 	points.forEach(function(v, i) {
-		b.println('Draw point ' + i.toString() + ' / ' + (points.length-1).toString());
+		// b.println('Draw point ' + i.toString() + ' / ' + (points.length-1).toString());
 		b.vertex(v.x, v.y);
 	});
 
