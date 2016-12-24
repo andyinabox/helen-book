@@ -31,7 +31,13 @@ function setup() {
 	doc = b.doc();
 }
 
-function drawFace(d) {
+function drawFace(d, i) {
+	b.println('Drawing face');
+
+	var current = d;
+	var prev = (i > 0) ? data[i-1] : undefined;
+	var next = (i < data.length-1) ? data[i+1] : undefined;
+
 	b.noFill();
 
 	b.stroke(200, 200, 200);
@@ -48,6 +54,7 @@ function drawFace(d) {
 }
 
 function drawText(d) {
+	b.println('Drawing text');
 
 	var mWidth = b.width - MARGIN*2;
 	var mHeight = b.height - MARGIN*2;
@@ -103,15 +110,20 @@ function drawText(d) {
 
 function draw() {
 
-	b.forEach(data, function(d, i) {
-	// var d = data[0]; i = 0;
-		drawFace(d);
-		drawText(d);
+	// b.forEach(data, function(d, i) {
+	var d = data[0]; i = 0;
+
+		b.println('===================================');
+		b.println(' Drawing '+d._id);
+		b.println('===================================');
+
+		drawFace(d, i);
+		// drawText(d);
 
 		if(i<data.length-1) {
 			b.addPage(b.AFTER);
 		}
-	});
+	// });
 }
 
 
