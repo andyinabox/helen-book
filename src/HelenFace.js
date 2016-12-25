@@ -43,88 +43,134 @@ var HelenFace = function(annotations, opts) {
 // 
 
 HelenFace.prototype.draw = function(x, y, width) {
+	b.println('HelenFace#draw');
 
-	var iterator = function(v, i) {
-		var xx = width * v.x + x;
-		var yy = width * v.y + y;
+	var transform = this._getTransform('basic', {
+		x: x,
+		y: y, 
+		width: width,
+	});
 
-		b.vertex(xx, yy);
-	}
-
-	return this._drawPoints(this.normalized, iterator);
+	return this._drawPoints(this.normalized.map(transform));
 }
 
 HelenFace.prototype.drawFeatures = function(x, y, width) {
-	var centroid = this.centroids.face;
+	b.println('HelenFace#drawFeatures');
+
 	var polygons = {};
 
-	var iterator = function(v, i) {
-		var xx = width * v.x + x;
-		var yy = width * v.y + y;
-
-		b.vertex(xx, yy);
-	}
+	var transform = this._getTransform('basic', {
+		x: x,
+		y: y, 
+		width: width
+	});
 
 	Object.keys(this.features).forEach(function(key, i) {
-		polygons[key] = this._drawPoints(this.normalized, iterator, this.features[key]);
+		polygons[key] = this._drawPoints(this.normalized.map(transform), this.features[key]);
 	}, this);
 
 	return polygons;
 }
 
 HelenFace.prototype.drawCentered = function(x, y, width) {
-	var centroid = this.centroids.face;
+	b.println('HelenFace#drawCentered');
 
-	// draw centered
-	var iterator = function(v, i) {
-		var xx = width * (v.x - centroid.x) + x;
-		var yy = width * (v.y - centroid.y) + y;
-		b.vertex(xx, yy);		
-	}
+	var transform = this._getTransform('centered', {
+		x: x,
+		y: y, 
+		width: width,
+		centroid: this.centroids.face
+	});
 
-	return this._drawPoints(this.normalized, iterator);
+	return this._drawPoints(this.normalized.map(transform));
 
 }
 
 HelenFace.prototype.drawFeaturesCentered = function(x, y, width) {
-	var centroid = this.centroids.face;
+	b.println('HelenFace#drawFeaturesCentered');
+
 	var polygons = {};
 
-	// draw centered
-	var iterator = function(v, i) {
-		var xx = width * (v.x - centroid.x) + x;
-		var yy = width * (v.y - centroid.y) + y;
-		b.vertex(xx, yy);		
-	}
+	var transform = this._getTransform('centered', {
+		x: x,
+		y: y, 
+		width: width,
+		centroid: this.centroids.face
+	});
 
 	Object.keys(this.features).forEach(function(key, i) {
-		polygons[key] = this._drawPoints(this.normalized, iterator, this.features[key]);
+		polygons[key] = this._drawPoints(this.normalized.map(transform), this.features[key]);
 	}, this);
 
 	return polygons;
 }
 
-HelenFace.prototype.getPoints = function(x, y, scale) {
+
+
+HelenFace.prototype.getPoints = function(transform, x, y, width) {
 	return this.normalized;
 }
 
-HelenFace.prototype.getLeftEyePoints = function(x, y, scale) {
+HelenFace.prototype.getLeftEyePoints = function(transform, x, y, width) {
 	return this.normalized.slice(LEFT_EYE_RANGE[0], LEFT_EYE_RANGE[1]);
 }
 
-HelenFace.prototype.getRightEyePoints = function(x, y, scale) {
+HelenFace.prototype.getRightEyePoints = function(transform, x, y, width) {
 	return this.normalized.slice(RIGHT_EYE_RANGE[0], RIGHT_EYE_RANGE[1]);
 }
 
-HelenFace.prototype.getMouthPoints = function(x, y, scale) {
+HelenFace.prototype.getMouthPoints = function(transform, x, y, width) {
 	return this.normalized.slice(MOUTH_OUTLINE_RANGE[0], MOUTH_OUTLINE_RANGE[1]);
+}
+
+HelenFace.prototype.getFirstPoint = function(type, x, y, width) {
+	var transform = this._getTransform(type, {
+		x: x,
+		y: y,
+		width: width,
+		centroid: this.centroids.face
+	});
+
+	return transform(this.normalized[0]);
+}
+
+HelenFace.prototype.getLastPoint = function(type, x, y, width) {
+	var transform = this._getTransform(type, {
+		x: x,
+		y: y,
+		width: width,
+		centroid: this.centroids.face
+	});
+
+	return transform(this.normalized[this.normalized.length-1]);
 }
 
 //
 // PRIVATE METHODS
 // 
 
-HelenFace.prototype._drawPoints = function(points, iterator, range) {
+HelenFace.prototype._getTransform = function(type, vars) {
+
+	var transforms = {
+		'basic' : function(v) {
+			var xx = vars.width * v.x + vars.x;
+			var yy = vars.width * v.y + vars.y;
+
+			return new b.Vector(xx, yy);		
+		},
+		'centered' : function(v) {
+			var xx = vars.width * (v.x - vars.centroid.x) + vars.x;
+			var yy = vars.width * (v.y - vars.centroid.y) + vars.y;
+			
+			return new b.Vector(xx, yy);		
+		}
+	};
+
+	return transforms[type];
+
+}
+
+HelenFace.prototype._drawPoints = function(points, range) {
 
 	// slice points
 	if(typeof range !== 'undefined') {
@@ -132,7 +178,12 @@ HelenFace.prototype._drawPoints = function(points, iterator, range) {
 	}
 
 	b.beginShape();
-	points.forEach(iterator);
+
+	points.forEach(function(v, i) {
+		// b.println('Draw point ' + i.toString() + ' / ' + (points.length-1).toString());
+		b.vertex(v.x, v.y);
+	});
+
 	return b.endShape();
 }
 

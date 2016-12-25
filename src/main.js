@@ -5,6 +5,7 @@ var doc;
 var MARGIN = 36;
 var GUTTER = 20;
 var TEXT_SIZE_INC = 0.25;
+// var LIMIT = 1;
 
 var urlPattern = /(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
 
@@ -16,6 +17,7 @@ function parseData(path) {
 	return b.JSON.decode(b.loadString("data.json")).rows.map(function(d) {
 		var data = d.value;
 		data.face = new HelenFace(data.annotations);
+		data.flickr_response = b.JSON.decode(data.flickr_response);
 		return data;
 	});
 }
@@ -30,15 +32,48 @@ function setup() {
 	doc = b.doc();
 }
 
-function drawFace(d) {
-	b.noFill();
+function drawVectorLine(v1, v2) {
+	return b.line(v1.x, v1.y, v2.x, v2.y);
+}
 
+function drawFace(d, i) {
+	b.println('Drawing face');
+
+	var current = d.face;
+	var prev = (i > 0) ? data[i-1].face : null;
+	var next = (i < data.length-1) ? data[i+1].face : null;
+	var x = b.width/2;
+	var y = b.height/3;
+	var width = 2 * b.width/3;
+
+
+	// draw connected lines
+	b.noFill();
 	b.stroke(200, 200, 200);
-	var poly = d.face.drawCentered(b.width/2, b.height/3, 2 * b.width/3	);
+
+	if (prev) {
+		var prevLine = drawVectorLine(
+			prev.getLastPoint('centered', x-b.width, y, width),
+			current.getFirstPoint('centered', x, y, width)
+		);
+		prevLine.textWrapPreferences.textWrapMode = TextWrapModes.CONTOUR;
+	}
+
+
+	if (next) {
+		var nextLine = drawVectorLine(
+			current.getLastPoint('centered', x, y, width),
+			next.getFirstPoint('centered', x+b.width, y, width)
+		);
+		nextLine.textWrapPreferences.textWrapMode = TextWrapModes.CONTOUR;
+	}
+
+	var poly = current.drawCentered(x, y, width);
 	poly.textWrapPreferences.textWrapMode = TextWrapModes.CONTOUR;
 
+	// draw features
 	b.stroke(0, 0, 0);
-	var features = d.face.drawFeaturesCentered(b.width/2, b.height/3, 2 * b.width/3	);
+	var features = current.drawFeaturesCentered(x, y, width);
 	// set text wrap
 	// Object.keys(features).forEach(function(key) {
 	// 	features[key].textWrapPreferences.textWrapMode = TextWrapModes.CONTOUR;
@@ -47,6 +82,7 @@ function drawFace(d) {
 }
 
 function drawText(d) {
+	b.println('Drawing text');
 
 	var mWidth = b.width - MARGIN*2;
 	var mHeight = b.height - MARGIN*2;
@@ -101,16 +137,27 @@ function drawText(d) {
 }
 
 function draw() {
+	var d;
+	var i = 0;
 
-	b.forEach(data, function(d, i) {
-	// var d = data[0]; i = 0;
-		drawFace(d);
-		drawText(d);
+	// loop though data, allow for limit if desired
+	while(i < LIMIT && i < data.length) {
+
+		d = data[i];
+
+		b.println('===================================');
+		b.println(' Drawing '+d._id);
+		b.println('===================================');
+
+		drawFace(d, i);
+		drawText(d, i);
 
 		if(i<data.length-1) {
 			b.addPage(b.AFTER);
 		}
-	});
+
+		i++;
+	}
 }
 
 
