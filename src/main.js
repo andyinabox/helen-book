@@ -5,7 +5,7 @@ var doc;
 var MARGIN = 36;
 var GUTTER = 20;
 var TEXT_SIZE_INC = 0.25;
-// var LIMIT = 1;
+var LIMIT = 1;
 
 var urlPattern = /(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/
 

@@ -8,12 +8,9 @@ const data = require('../data/data.json').rows.map(function(d) { return d.value 
 
 var description;
 
-var cleanText = (str) => {
-	return decode(strip(str));
-}
+var cleanText = str => decode(strip(str));
 
-
-var loadComments = (d) => {
+var loadComments = d => {
 	var comments = '';
 	var flickr, count;
 
