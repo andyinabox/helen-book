@@ -7,7 +7,7 @@
     "open": "open helen-book.indd && open index.jsx",
     "start": "osascript scripts/run.scpt $PWD/index.jsx",
     "setup": "npm run clobber; npm run data && npm run descriptions",
-    "data": "node scripts/get-data.js has_description --limit=10",
+    "data": "node scripts/get-data.js entries --limit=10",
     "descriptions": "mkdir -p data/txt/ && node scripts/parse-descriptions.js",
     "clobber": "rm data/*.json && rm -rf data/txt"
   },
@@ -17,6 +17,7 @@
     "basiljs": "basiljs/basil.js",
     "es6-promise": "^4.0.5",
     "extendscript-es5-shim": "ExtendScript/extendscript-es5-shim",
+    "got": "^8.3.2",
     "helen": "andyinabox/helen#v0.0.1"
   },
   "repository": {
@@ -25,7 +26,6 @@
   },
   "devDependencies": {
     "dotenv": "^2.0.0",
-    "download": "^5.0.2",
     "minimist": "^1.2.0",
     "parse-entities": "^1.1.0",
     "strip": "^3.0.0"
