@@ -5,7 +5,6 @@ require('dotenv').config();
 const fs = require('fs');
 const querystring = require('querystring');
 const got = require('got');
-// const download = require('download');
 const Promise = require('es6-promise').Promise;
 
 var argv = require('minimist')(process.argv.slice(2));
@@ -27,11 +26,6 @@ const gotOptions = {
 const db = process.env.COUCHDB_SERVER;
 const constantsUrl = db + 'helendb/_design/main/_view/constants';
 const dataUrl = db + 'helendb/_design/main/_view/' + doc + '?' + querystring.stringify(argv);
-// in .env
-
-// var constants = download(constantsUrl, 'data/constants.json', options);
-// console.log('grabbing: '+dataUrl)
-// var data = download(dataUrl, 'data/constants.json', options);
 
 console.log('grabbing: '+constantsUrl)
 const constants = got.get(constantsUrl).then(response => {
